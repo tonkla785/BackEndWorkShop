@@ -14,6 +14,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    //Get all user
     public List<UserEntity> getAllUser(){
         List<UserEntity> dataList = userRepository.findAll();
         return  dataList;
