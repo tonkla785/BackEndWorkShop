@@ -2,8 +2,7 @@ package com.pcc.backend.Entity;
 
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "users")
@@ -19,9 +18,9 @@ public class UserEntity {
     @Column(name = "lastname", length = 100)
     private String lastname;
 
-    @Column(name = "birtday")
+    @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
-    private Date birtday;
+    private Date birthday;
 
     @Column(name = "age")
     private Integer age;
@@ -30,7 +29,8 @@ public class UserEntity {
     private String gender;
 
     @Column(name = "update_date")
-    private Timestamp updateDate;
+    @Temporal(TemporalType.DATE)
+    private Date updateDate;
 
     public Long getId() {
         return id;
@@ -56,12 +56,12 @@ public class UserEntity {
         this.lastname = lastname;
     }
 
-    public Date getBirtday() {
-        return birtday;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setBirtday(Date birtday) {
-        this.birtday = birtday;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public Integer getAge() {
@@ -80,11 +80,11 @@ public class UserEntity {
         this.gender = gender;
     }
 
-    public Timestamp getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Timestamp updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 }

@@ -3,23 +3,13 @@ package com.pcc.backend.DTO;
 import java.sql.Timestamp;
 import java.sql.Date;
 
-public class UserRequestDTO {
-
+public class UserResponseDTO {
     private String firstname;
     private String lastname;
     private Date birthday;
     private Integer age;
     private String gender;
     private Timestamp updateDate;
-
-    public UserRequestDTO(String firstname, String lastname, Date birthday, Integer age, String gender, Timestamp updateDate) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.birthday = birthday;
-        this.age = age;
-        this.gender = gender;
-        this.updateDate = updateDate;
-    }
 
     public String getFirstname() {
         return firstname;
