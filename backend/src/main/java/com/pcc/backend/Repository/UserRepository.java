@@ -28,7 +28,7 @@ public class UserRepository {
     }
 
     public List<UserEntity> findByField(Long id,String firstname, String lastname, Date birthday, Integer age, String gender, Date updatedate) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM testdb.users WHERE 1 = 1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM testdb.users WHERE 1 = 1"); //where
         List<Object> params = new ArrayList<>();
 
         if (!ObjectUtils.isEmpty(id) && id >0) {
@@ -37,8 +37,9 @@ public class UserRepository {
         }
 
         if (!ObjectUtils.isEmpty(firstname)) {
-            sql.append(" AND firstname = ?");
-            params.add(firstname);
+            sql.append(" AND (firstname LIKE ? OR lastname LIKE ?)");
+            params.add("%" + firstname + "%");
+            params.add("%" + firstname + "%");
         }
 
         if (!ObjectUtils.isEmpty(lastname)) {

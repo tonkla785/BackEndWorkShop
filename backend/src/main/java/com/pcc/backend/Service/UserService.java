@@ -3,17 +3,24 @@ package com.pcc.backend.Service;
 import com.pcc.backend.DTO.UserRequestDTO;
 import com.pcc.backend.DTO.UserResponseDTO;
 import com.pcc.backend.Entity.UserEntity;
+import com.pcc.backend.Repository.UserJPARepository;
 import com.pcc.backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
+import java.sql.Date;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserJPARepository userJPARepository;
 
     //Get all user
     public List<UserEntity> getAllUser() {
@@ -80,9 +87,100 @@ public class UserService {
         }
     }
 
+    //Get User Jpa
+    public List<UserEntity> findAll() {
+        try {
+            return userJPARepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while get user data", e);
+        }
+    }
+
+    //Create User Jpa
+    public UserResponseDTO createUserJpa(UserRequestDTO userRequestDTO) {
+        try {
+            validateUser(userRequestDTO);
+            UserEntity userEntity = new UserEntity();
+            userEntity.setFirstname(userRequestDTO.getFirstname());
+            userEntity.setLastname(userRequestDTO.getLastname());
+            userEntity.setAge(userRequestDTO.getAge());
+            userEntity.setBirthday(userRequestDTO.getBirthday());
+            userEntity.setGender(userRequestDTO.getGender());
+            userEntity.setUpdateDate(java.sql.Date.valueOf(LocalDate.now()));
+            UserEntity saved = userJPARepository.save(userEntity);
+
+            UserResponseDTO dto = new UserResponseDTO();
+            dto.setFirstname(saved.getFirstname());
+            dto.setLastname(saved.getLastname());
+            dto.setAge(saved.getAge());
+            dto.setBirthday(saved.getBirthday());
+            dto.setGender(saved.getGender());
+            dto.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+            return dto;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while save user data", e);
+        }
+    }
+
+    //Delete User Jpa
+    public void deleteUserJpa(Long id) {
+        try {
+            UserEntity user = userJPARepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+            userJPARepository.delete(user);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Update User
+    public UserResponseDTO updateUserJpa(long id, UserRequestDTO userRequestDTO) {
+        try {
+            UserEntity userEntity = userJPARepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+            validateUser(userRequestDTO);
+
+            userEntity.setFirstname(userRequestDTO.getFirstname());
+            userEntity.setLastname(userRequestDTO.getLastname());
+            userEntity.setAge(userRequestDTO.getAge());
+            userEntity.setBirthday(userRequestDTO.getBirthday());
+            userEntity.setGender(userRequestDTO.getGender());
+            userEntity.setUpdateDate(java.sql.Date.valueOf(LocalDate.now()));
+            UserEntity saved = userJPARepository.save(userEntity);
+
+            UserResponseDTO dto = new UserResponseDTO();
+            dto.setFirstname(saved.getFirstname());
+            dto.setLastname(saved.getLastname());
+            dto.setAge(saved.getAge());
+            dto.setBirthday(saved.getBirthday());
+            dto.setGender(saved.getGender());
+            dto.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+            return dto;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while save user data", e);
+        }
+    }
+
+    public List<UserEntity> findUserByFieldJpa(
+            Long id,
+            String firstname,
+            String lastname,
+            Date birthday,
+            Integer age,
+            String gender,
+            Date updateDate
+    ) {
+        return userJPARepository.findByField(id, firstname, lastname, birthday, age, gender, updateDate);
+    }
+
     //Valid Method
     private void validateUser(UserRequestDTO userRequestDTO) {
-        if (userRequestDTO == null) {
+        if (ObjectUtils.isEmpty(userRequestDTO)) {
             throw new IllegalArgumentException("Please enter user data");
         }
 

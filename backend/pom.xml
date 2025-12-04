@@ -68,7 +68,20 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.0</version> <!-- หรือรุ่นล่าสุด -->
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>6.21.0</version>
+        </dependency>
+
+
+    </dependencies>
 
 	<build>
 		<plugins>
